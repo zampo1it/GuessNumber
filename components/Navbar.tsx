@@ -1,14 +1,20 @@
+"use client";
 import { Socials } from "@/constants";
 import Image from "next/image";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
+  const pathname = usePathname();
   return (
     <div className="fixed top-0 bg-transparent z-[20] w-full flex  gap-5 md:justify-between md:px-60 p-5">
-      <h1 className="text-white text-[45px]">
+      {pathname !== "/scoreboard" && (
+        <h1 className="text-white text-[24px] sm:text-[32px] md:text-[45px]">
         Kostya <span className="font-thin">Kuznietsov</span>
-        <span className="text-yellow-500">.</span>
-      </h1>
+      <span className="text-yellow-500">.</span>
+    </h1>
+)}
+
       <div className="flex flex-row gap-5">
         {Socials.map((social) => (
           <Image

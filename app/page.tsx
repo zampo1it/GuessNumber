@@ -4,7 +4,6 @@ import Link from "next/link";
 import Particle from "@/components/Particle";
 import Image from "next/image";
 import Game from "@/components/Game";
-import FeedbackBox from "@/components/FeedbackBox";
 
 export default function Home() {
   return (
@@ -15,8 +14,8 @@ export default function Home() {
   >
     Scoreboard
   </Link>
-  <main className="flex items-center h-screen relative bg-cover bg-[url('/assets/bg-explosion.png')]">
-    <div className="absolute right-0 top-0 h-full w-[80%] z-[2]">
+  <main className="flex flex-col relative min-h-screen pt-30 px-4 overflow-hidden bg-cover bg-[url('/assets/bg-explosion.png')]">
+  <div className="absolute right-0 top-0 h-full w-[80%] z-[2]">
       <Particle />
     </div>
 
@@ -26,8 +25,8 @@ export default function Home() {
         alt="Kostya"
         width={1024}
         height={1407}
-        className="w-[300px] h-[420px] z-[1] md:h-[625px] md:w-[467px]"
-      />
+        className="hidden md:block w-[300px] h-[420px] z-[1] md:h-[625px] md:w-[467px]"
+        />
     </div>
 
     <Image
@@ -38,23 +37,9 @@ export default function Home() {
       className="absolute left-0 top-0"
     />
 
-<div
-  className="flex flex-col gap-3 z-[10] pt-20 items-start justify-start"
-  style={{ marginLeft: "25%" }}
->      <Game />
-      <div className="relative w-[100px] h-[100px] md:w-[160px] md:h-[160px] mt-5 pl-10">
-        <Image
-          src="/assets/rounded-text.png"
-          alt="projects"
-          width={160}
-          height={160}
-          className="slow-spin"
-          priority={true}
-        />
-      </div>
+<div className="z-[10] flex flex-col items-center md:items-start justify-center w-full px-4 md:pr-[25%]">
+      <Game />
     </div>
-
-    <FeedbackBox />
   </main>
 </>
   );
