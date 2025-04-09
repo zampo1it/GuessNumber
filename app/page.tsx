@@ -1,22 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import Particle from "@/components/Particle";
+// import Particle from "@/components/Particle";
 import Image from "next/image";
 import Game from "@/components/Game";
 
 export default function Home() {
   return (
 <>
-  <Link
-    href="/scoreboard"
-    className="absolute top-4 right-4 z-30 text-white underline hover:text-yellow-300"
-  >
-    Scoreboard
-  </Link>
-  <main className="flex flex-col relative min-h-screen pt-30 px-4 overflow-hidden bg-cover bg-[url('/assets/bg-explosion.png')]">
+
+  <main className="flex flex-col relative min-h-screen px-0 md:px-4 overflow-hidden bg-cover bg-[url('/assets/bg-explosion.png')] pt-0 md:pt-30">
   <div className="absolute right-0 top-0 h-full w-[80%] z-[2]">
-      <Particle />
+      {/* <Particle /> */}
     </div>
 
     <div className="absolute right-10 md:right-40 bottom-0 z-[10]">
@@ -29,17 +24,41 @@ export default function Home() {
         />
     </div>
 
-    <Image
+    {/* <Image
       src="/assets/top-left-img.png"
       alt="paint"
       width={230}
       height={230}
       className="absolute left-0 top-0"
-    />
+    /> */}
 
-<div className="z-[10] flex flex-col items-center md:items-start justify-center w-full px-4 md:pr-[25%]">
-      <Game />
-    </div>
+<div className="z-[10] flex flex-col w-full md:w-auto items-center md:items-start justify-center px-0 md:px-4 md:pr-[25%]">
+  <Game />
+</div>
+<Link
+  href="/feedback"
+  className="fixed bottom-4 right-16 z-30 hover:scale-105 transition-transform"
+>
+  <Image
+    src="/assets/feedback.png"
+    alt="Feedback"
+    width={50}
+    height={50}
+    className="w-[40px] h-[40px] md:w-[50px] md:h-[50px]"
+  />
+</Link>
+<Link
+  href="/scoreboard"
+  className="fixed bottom-4 right-4 z-30 hover:scale-105 transition-transform"
+>
+  <Image
+    src="/assets/scoreboard.png"
+    alt="Scoreboard"
+    width={50}
+    height={50}
+    className="w-[40px] h-[40px] md:w-[50px] md:h-[50px]"
+  />
+</Link>
   </main>
 </>
   );
