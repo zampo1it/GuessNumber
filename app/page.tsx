@@ -24,14 +24,6 @@ export default function Home() {
         />
     </div>
 
-    {/* <Image
-      src="/assets/top-left-img.png"
-      alt="paint"
-      width={230}
-      height={230}
-      className="absolute left-0 top-0"
-    /> */}
-
 <div className="z-[10] flex flex-col w-full md:w-auto items-center md:items-start justify-center px-0 md:px-4 md:pr-[25%]">
   <Game />
 </div>

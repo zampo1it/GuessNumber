@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 //import Navbar from "@/components/Navbar";
+import Script from "next/script";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,21 +17,23 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Guess The Number Game",
-  description: "Guess The Number Game by Kostya Kuznietsov",
+  description: "Try to guess the number!",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* <Navbar /> */}
+      <head>
+        <link rel="stylesheet" href="/number-picker-swiper/number-swiper.css" />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
+
+        {/* Подключение number-swiper.js безопасно для Next.js */}
+        <Script
+          src="/number-picker-swiper/number-swiper.js"
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );
