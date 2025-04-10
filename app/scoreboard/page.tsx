@@ -2,25 +2,33 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import FeedbackBox from "@/components/FeedbackBox";
+
+type Difficulty = "easy" | "medium" | "hard";
+
+type ScoreEntry = {
+  attempts: number;
+  time: number;
+  date: string;
+  difficulty: Difficulty;
+};
 
 export default function ScoreboardPage() {
-  const [scores, setScores] = useState<any[]>([]);
-  const [lastScore, setLastScore] = useState<any | null>(null);
-  const [difficultyFilter, setDifficultyFilter] = useState("hard");
-  const [sortField, setSortField] = useState<string | null>(null);
+  const [scores, setScores] = useState<ScoreEntry[]>([]);
+  const [lastScore, setLastScore] = useState<ScoreEntry | null>(null);
+  const [difficultyFilter, setDifficultyFilter] = useState<Difficulty>("hard");
+  const [sortField, setSortField] = useState<keyof ScoreEntry | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     const stored = localStorage.getItem("scoreboard");
     if (stored) {
-      const parsed = JSON.parse(stored);
+      const parsed: ScoreEntry[] = JSON.parse(stored);
       setScores(parsed);
       setLastScore(parsed[parsed.length - 1]);
     }
   }, []);
 
-  const handleSort = (field: string) => {
+  const handleSort = (field: keyof ScoreEntry) => {
     if (sortField === field) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
@@ -33,11 +41,15 @@ export default function ScoreboardPage() {
 
   const sortedScores = [...filteredScores].sort((a, b) => {
     if (!sortField) return 0;
-    if (sortOrder === "asc") {
-      return a[sortField] > b[sortField] ? 1 : -1;
-    } else {
-      return a[sortField] < b[sortField] ? 1 : -1;
+    const valA = a[sortField];
+    const valB = b[sortField];
+    if (typeof valA === "number" && typeof valB === "number") {
+      return sortOrder === "asc" ? valA - valB : valB - valA;
     }
+    if (typeof valA === "string" && typeof valB === "string") {
+      return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    }
+    return 0;
   });
 
   return (
@@ -48,7 +60,9 @@ export default function ScoreboardPage() {
       >
         ← Go Back
       </Link>
-      <br/><br/>
+
+      <br />
+      <br />
       <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">🏆 Scoreboard</h1>
 
       {lastScore && (
@@ -62,12 +76,12 @@ export default function ScoreboardPage() {
       )}
 
       <div className="flex justify-center gap-4 mb-6">
-        {['easy', 'medium', 'hard'].map((level) => (
+        {["easy", "medium", "hard"].map((level) => (
           <button
             key={level}
-            onClick={() => setDifficultyFilter(level)}
+            onClick={() => setDifficultyFilter(level as Difficulty)}
             className={`px-4 py-2 rounded font-bold transition ${
-              difficultyFilter === level ? 'bg-yellow-500 text-black' : 'bg-gray-700 text-white'
+              difficultyFilter === level ? "bg-yellow-500 text-black" : "bg-gray-700 text-white"
             }`}
           >
             {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -81,45 +95,43 @@ export default function ScoreboardPage() {
         <div className="w-full overflow-x-auto">
           <div className="flex justify-center">
             <table className="w-fit md:w-full md:max-w-[800px] border border-white text-left">
-            <thead>
-              <tr className="border-b border-white text-center">
-                <th className="p-2">#</th>
-                <th
-                  className="p-2 cursor-pointer hover:text-yellow-400"
-                  onClick={() => handleSort("attempts")}
-                >
-                  Attempts {sortField === "attempts" && (sortOrder === "asc" ? "▲" : "▼")}
-                </th>
-                <th
-                  className="p-2 cursor-pointer hover:text-yellow-400"
-                  onClick={() => handleSort("time")}
-                >
-                  Time (sec) {sortField === "time" && (sortOrder === "asc" ? "▲" : "▼")}
-                </th>
-                <th
-                  className="p-2 cursor-pointer hover:text-yellow-400"
-                  onClick={() => handleSort("date")}
-                >
-                  Date {sortField === "date" && (sortOrder === "asc" ? "▲" : "▼")}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedScores.map((entry, index) => (
-                <tr key={index} className="border-b border-white text-center">
-                  <td className="p-2">{index + 1}</td>
-                  <td className="p-2">{entry.attempts}</td>
-                  <td className="p-2">{entry.time}</td>
-                  <td className="p-2">{entry.date}</td>
+              <thead>
+                <tr className="border-b border-white text-center">
+                  <th className="p-2">#</th>
+                  <th
+                    className="p-2 cursor-pointer hover:text-yellow-400"
+                    onClick={() => handleSort("attempts")}
+                  >
+                    Attempts {sortField === "attempts" && (sortOrder === "asc" ? "▲" : "▼")}
+                  </th>
+                  <th
+                    className="p-2 cursor-pointer hover:text-yellow-400"
+                    onClick={() => handleSort("time")}
+                  >
+                    Time (sec) {sortField === "time" && (sortOrder === "asc" ? "▲" : "▼")}
+                  </th>
+                  <th
+                    className="p-2 cursor-pointer hover:text-yellow-400"
+                    onClick={() => handleSort("date")}
+                  >
+                    Date {sortField === "date" && (sortOrder === "asc" ? "▲" : "▼")}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {sortedScores.map((entry, index) => (
+                  <tr key={index} className="border-b border-white text-center">
+                    <td className="p-2">{index + 1}</td>
+                    <td className="p-2">{entry.attempts}</td>
+                    <td className="p-2">{entry.time}</td>
+                    <td className="p-2">{entry.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
       )}
-
-
     </div>
   );
 }
